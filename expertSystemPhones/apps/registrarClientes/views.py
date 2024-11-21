@@ -17,7 +17,7 @@ def Registro(request):
     nuevoCliente.save()
 
     messages.success(
-      request, f"Felicitaciones, el empleado {nombre} fue registrado correctamente 😉")
+      request, f"Felicitaciones, el cliente {nombre} fue registrado correctamente 😉")
     
     return render(request, 'pages/inicio.html')
     
