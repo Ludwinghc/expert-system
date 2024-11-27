@@ -2,6 +2,10 @@ from django.shortcuts import render
 from django.db import connection
 from apps.registrarClientes.models import Pregunta, Respuesta, Cliente
 from apps.solicitarRecomendacion.models import Recomendacion
+from django.core.mail import EmailMessage 
+from django.conf import settings
+from django.contrib import messages  # Para usar mensajes flash
+from django.template.loader import render_to_string
 from apps.solicitarRecomendacion.utils.recomendation import recomendation_phone
 
 # Create your views here.
@@ -14,18 +18,12 @@ def Recomendacion(request):
 		pregunta5 = request.POST.get('pregunta_5')
 		pregunta6 = request.POST.get('pregunta_6')
 		
-		print(pregunta1)
-		print(pregunta2)
-		print(pregunta3)
-		print(pregunta4)
-		print(pregunta5)
-		print(pregunta6)
 		# Obtener el ultimo ID del cliente registrado
 		ultimo_cliente = Cliente.objects.last()
 		if ultimo_cliente:
 			ultimo_id = ultimo_cliente.ID_CLIENTE
 
-		print(ultimo_id)
+		print(f'el ultimo id es: {ultimo_id}')
 		recomendacion = recomendation_phone(
 		pregunta1=pregunta1,
 		pregunta2=pregunta2,
@@ -34,13 +32,58 @@ def Recomendacion(request):
 		pregunta5=pregunta5,
 		pregunta6=pregunta6)	
 
-		print (recomendacion)
-		if recomendacion:
+		celulares = []
+					# ENVIAR LA RECOMENDACION AL CORREO DEL ULTIMO CLIENTE REGISTRADO
+		correo_response = Cliente.objects.last().CORREO
+		correo_cliente = correo_response
+
+		# lOGICA PARA REGISTRAR LA RECOMENDACION
+		if not recomendacion:
+			recomendacion_response = 'No tengo un celular que se cumpla tus necesidades'
+			template_fail = render_to_string('pages/email_fail.html',{
+				'mensaje': recomendacion_response
+			})
+			email = EmailMessage(
+				subject = 'Recomendación de celulares',
+				body = template_fail,
+				from_email = settings.EMAIL_HOST_USER,
+				to = [correo_cliente]
+			)
+			email.fail_silently = False
+			email.send()
+		else:
 			for opcion in recomendacion:
-				id_opcion = opcion['ID_OPCIONES']
-				nombre = opcion['NOMBRE']
-			with connection.cursor() as cursor:
-				cursor.callproc('agregar_recomendacion', [ultimo_id, id_opcion])
+				print(f"Id de la opcion: {opcion['ID_OPCIONES']}")
+				print(f"Id de la opcion: {opcion['NOMBRE']}")
+				celulares.append(opcion['NOMBRE'])
+				with connection.cursor() as cursor:
+					cursor.callproc('agregar_recomendacion', [ultimo_id, opcion['ID_OPCIONES']])
+			
+
+			
+			template = render_to_string('pages/email.html',{
+				'Celulares': celulares
+			})
+
+			email = EmailMessage(
+				subject = 'Recomendación de celulares',
+				body = template,
+				from_email = settings.EMAIL_HOST_USER,
+				to = [correo_cliente]
+			)
+			email.fail_silently = False
+			email.send()
+
+			messages.success(request, f"Tu Recomendación fue enviada a tu correo 😉")
+
+
+		
+		# if recomendacion:
+		# 	for opcion in recomendacion:
+		# 		id_opcion = opcion['ID_OPCIONES']
+		# 		nombre = opcion['NOMBRE']
+		# 	with connection.cursor() as cursor:
+		# 		cursor.callproc('agregar_recomendacion', [ultimo_id, id_opcion])
 		
 		return render(request, 'pages/inicio.html')
   # Crear una lista para almacenar cada pregunta y sus respuestas
@@ -59,5 +102,7 @@ def Recomendacion(request):
 	contexto = {
       'preguntas_con_respuestas': preguntas_con_respuestas
 			}
-	print(contexto)
 	return render(request, 'pages/recomendacion.html', contexto)
+
+def Filtro(request):
+	return render(request, 'pages/filtro.html')
