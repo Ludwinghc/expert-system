@@ -1,0 +1,28 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Registrar Cliente{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row text-center">
+  <div class="col">
+    <p class="text-light h1 fw-semibold">
+      
+      ¿Ya estas registrado?
+      
+    </p>
+  </div>
+  </div>
+  <div class="row">
+    <figure class="text-center">
+      <blockquote class="blockquote">
+        <p class="text-light">Este es un sistema experto que le ayudará a recomendar un celular de acuerdo a sus necesidades y gustos</p>
+      </blockquote>
+<div class="row">
+  <div class="col-sm-12 col-md-6 p-2"><a href="{% url 'Recomendacion' %}" class="btn btn-outline-success" tabindex="-1" role="button" aria-disabled="true">SI</a></div>
+  <div class="col-sm-12 col-md-6 p-2"><a href="{% url 'Registro' %}" class="btn btn-outline-danger" tabindex="-1" role="button" aria-disabled="true">NO</a></div>
+</div>
+    </figure>
+  </div>
+</div>
+{% endblock %}

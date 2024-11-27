@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Registrar Cliente{% endblock %}
+
+{% block content %}=
+<div class="container-fluid">
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h1 class="text-light">Registro Nuevo Cliente</h1>
+  </div>
+</div>
+<form name="formCliente" action="{% url 'Registro' %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="row g-3 justify-content-center mb-3">
+  <div class="col-sm-12 col-md-3  align-self-center">
+    <label for="nombre" class="form-label text-light">Nombre:</label>
+    <input type="text" class="form-control form-control-sm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="nombreCliente">
+  </div>
+  <div class="col-sm-12 col-md-3  align-self-center">
+    <label for="apellidos" class="form-label text-light">Apellidos:</label>
+    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="apellidoCliente">
+  </div>
+</div>
+<div class="row g-3 justify-content-center">
+  <div class="col-sm-12 col-md-6">
+    <label for="correo" class="form-label text-light">Correo:</label>
+    <input type="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="correoCliente">
+  </div>
+</div>
+<div class="row g-3 justify-content-center text-center">
+  <div class="col-sm-12 col-md-6 justify-content-center">
+    <button type="submit" class="btn btn-outline-primary mt-3">Registrar</button>
+  </div>
+</div>
+</form>
+</div>
+
+{% endblock %}
