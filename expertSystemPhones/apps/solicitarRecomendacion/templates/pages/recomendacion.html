@@ -1,0 +1,34 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Registrar Cliente{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h1 class="text-light">Nueva recomendación de celular</h1>
+    </div>
+  </div>
+  <form name="formCliente" action="{% url 'Recomendacion' %}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {%  for item in preguntas_con_respuestas %}
+  <div class="row g-3 justify-content-center mb-3">
+    <div class="col-sm-12 col-md-3  align-self-center">
+      <label for="nombre" class="form-label text-light mb-4">{{ item.pregunta }}</label>
+      <select class="form-select" name="pregunta_{{ item.id }}" aria-label="Default select example" required>
+        <option value="" selected>seleccionar:</option>
+        {% for respuesta in item.respuestas %}
+        <option value="{{ respuesta.RESPUESTA }}">{{ respuesta.RESPUESTA }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  {% endfor %}
+  <div class="row g-3 justify-content-center text-center">
+    <div class="col-sm-12 col-md-6 justify-content-center">
+      <button type="submit" class="btn btn-outline-primary mt-3">recomendación</button>
+    </div>
+  </div>
+  </form>
+  </div>
+{% endblock %}
