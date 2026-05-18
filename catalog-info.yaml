@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: expert-system
+  title: expert-system
+  description: Website de un sistema experto que es capaz de recomendar celulares de acuerdo a las necesidades del usuario
+  annotations:
+    github.com/project-slug: Ludwinghc/expert-system
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/source-location: url:https://github.com/Ludwinghc/expert-system/tree/master/
+  tags:
+    - python
+    - django
+    - frontend
+    - backend
+    - sql
+spec:
+  type: website
+  lifecycle: production
+  owner: user:default/ludwinghc
