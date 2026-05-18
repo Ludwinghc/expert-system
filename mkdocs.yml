@@ -1,0 +1,9 @@
+site_name: expert-system
+site_description: Sistema experto para la generacion de recomendaciones de celulares
+
+nav:
+  - Inicio: index.md
+  - Operación: operacion.md
+
+plugins:
+  - techdocs-core
